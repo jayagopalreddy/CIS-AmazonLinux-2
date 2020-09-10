@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # AmazonLinux-2-CIS - v1.0.0 - Latest
 
 ## Amazon Linux 2 - CIS Benchmark Hardening Script
@@ -47,3 +48,6 @@ Refer to AmazonLinux-2-CIS_Benchmark_(level1, level1_and_level2, or level2).ymls
 This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
 file, You can obtain one at https://mozilla.org/MPL/2.0/.
+=======
+# CIS-AmazonLinux-2
+>>>>>>> 863195d2f3bb65724149a1e38aa7baa1a0fee4fc
