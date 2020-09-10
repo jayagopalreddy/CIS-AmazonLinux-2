@@ -260,8 +260,8 @@
     dest: /etc/ssh/sshd_config
     regexp: '^X11Forwarding'
     line: 'X11Forwarding no'
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - patch
@@ -540,8 +540,8 @@
 - name: "SCORED | 5.2.18 | PATCH | Ensure SSH access is limited"
   debug:
     msg: "Edit the /etc/ssh/sshd_config file to set one or more of the following parameters: AllowUsers <list>, AllowGroups <list>, DenyUsers <list>,DenyGroups <list>"
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - level1
     - patch
@@ -603,9 +603,9 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
   tags:
     - level1
     - patch
@@ -624,9 +624,9 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
   tags:
     - level1
     - patch
@@ -645,9 +645,9 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_ad_ldap_joined_machine is defined and amazonlinux2cis_ad_ldap_joined_machine
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_ad_ldap_joined_machine is defined and amazonlinux2cis_ad_ldap_joined_machine
   tags:
     - level1
     - patch
@@ -673,8 +673,8 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - level1
     - patch
@@ -694,8 +694,8 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - level1
     - patch
@@ -714,8 +714,8 @@
     - system-auth
     - password-auth
 
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - level1
     - patch
@@ -734,8 +734,8 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - level1
     - patch
@@ -754,8 +754,8 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - level1
     - patch
@@ -800,9 +800,9 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
   tags:
     - level1
     - patch
@@ -824,9 +824,9 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
   tags:
     - level1
     - patch
@@ -845,9 +845,9 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
   tags:
     - level1
     - patch
@@ -866,9 +866,9 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_ad_ldap_joined_machine is defined and amazonlinux2cis_ad_ldap_joined_machine
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_ad_ldap_joined_machine is defined and amazonlinux2cis_ad_ldap_joined_machine
   tags:
     - level1
     - patch
@@ -894,9 +894,9 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
   tags:
     - level1
     - patch
@@ -915,9 +915,9 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_ad_ldap_joined_machine is defined and not amazonlinux2cis_ad_ldap_joined_machine
   tags:
     - level1
     - patch
@@ -936,9 +936,9 @@
   loop:
     - system-auth
     - password-auth
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_ad_ldap_joined_machine is defined and amazonlinux2cis_ad_ldap_joined_machine
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_ad_ldap_joined_machine is defined and amazonlinux2cis_ad_ldap_joined_machine
   tags:
     - level1
     - patch
@@ -1625,10 +1625,10 @@
     state: present
     dest: /etc/bashrc
     regexp: 'umask'
-    line: 'umask {{ amazonlinux2cis_default_user_umask }}'
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_modify_default_user_umask is defined and amazonlinux2cis_modify_default_user_umask
+    line: 'umask 27'
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_modify_default_user_umask is defined and amazonlinux2cis_modify_default_user_umask
   tags:
     - level1
     - patch
@@ -1640,10 +1640,10 @@
       state: present
       dest: /etc/profile
       regexp: 'umask'
-      line: 'umask {{ amazonlinux2cis_default_user_umask }}'
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_modify_default_user_umask is defined and amazonlinux2cis_modify_default_user_umask
+      line: 'umask 27'
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_modify_default_user_umask is defined and amazonlinux2cis_modify_default_user_umask
   tags:
       - level1
       - patch
@@ -1656,9 +1656,20 @@
     recurse: yes
     patterns: "*.sh"
   register: profiled_dir
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_modify_default_user_umask is defined and amazonlinux2cis_modify_default_user_umask
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_modify_default_user_umask is defined and amazonlinux2cis_modify_default_user_umask
+  tags:
+    - level1
+    - patch
+    - rule_5.4.4
+    - low
+
+- name: "SCORED | 5.4.4 | PATCH | Ensure default user umask is 027 or more restrictive"
+  debug: var=profiled_dir
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_modify_default_user_umask is defined and amazonlinux2cis_modify_default_user_umask
   tags:
     - level1
     - patch
@@ -1670,13 +1681,15 @@
     state: present
     dest: "{{ item }}"
     regexp: 'umask'
-    line: 'umask {{ amazonlinux2cis_default_user_umask }}'
+    line: 'umask 27'
     backup: yes
-  with_items: profiled_dir.files.path
+#  with_items: profiled_dir.files.path
+  loop:
+    - profiled_dir.stdout_lines
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_modify_default_user_umask is defined and amazonlinux2cis_modify_default_user_umask
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_modify_default_user_umask is defined and amazonlinux2cis_modify_default_user_umask
   tags:
     - level1
     - patch
@@ -1689,8 +1702,8 @@
     dest: /etc/bashrc
     regexp: '^TMOUT'
     line: 'TMOUT=600'
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - patch
@@ -1703,12 +1716,25 @@
     dest: /etc/profile
     regexp: '^TMOUT'
     line: 'TMOUT=600'
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - patch
     - rule_5.4.5
+    - low
+
+- name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted"
+  lineinfile:
+    path: /etc/pam.d/su
+    regexp: '#auth		required	pam_wheel.so use_uid'
+    line: "auth  required  pam_wheel.so  use_uid"
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+  tags:
+    - level1
+    - patch
+    - rule_5.6
     - low
 
 - name: "SCORED | 5.6 | PATCH | Ensure access to the su command is restricted"
@@ -1718,8 +1744,8 @@
     regexp: '^wheel:x:10:(.*)$'
     line: 'wheel:x:10:\1,root'
     backrefs: yes
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - level1
     - patch

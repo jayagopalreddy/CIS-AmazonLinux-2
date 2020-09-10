@@ -25,8 +25,8 @@
     regexp: "^admin_space_left_action"
     line: "admin_space_left_action = halt"
     state: present
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -40,8 +40,8 @@
     regexp: "^space_left_action"
     line: "space_left_action = email"
     state: present
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -55,8 +55,8 @@
     regexp: "^action_mail_acct"
     line: "action_mail_acct = root"
     state: present
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -70,8 +70,8 @@
     regexp: "^max_log_file_action"
     line: "max_log_file_action = keep_logs"
     state: present
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -97,13 +97,23 @@
 - name: "SCORED | 4.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
   replace:
     dest: /etc/default/grub
-    regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
+    regexp: '(^GRUB_CMDLINE_LINUX_DEFAULT\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
     replace: '\1"\2 audit=1"'
     follow: yes
   ignore_errors: yes
   notify: generate new grub config
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+  tags:
+    - level2
+    - auditd
+    - patch
+    - rule_4.1.3
+    - low
+
+- name: "SCORED | 4.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
+  command: grub2-mkconfig -o /boot/grub2/grub.cfg
+  ignore_errors: yes
   tags:
     - level2
     - auditd
@@ -112,18 +122,20 @@
     - low
 
 - name: "SCORED | 4.1.4 | PATCH | Ensure events that modify date and time information are collected"
-  blockinfile:
-    path: /etc/audit/audit.rules
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "{{ item }}"
     state: present
     create: yes
-    block: " -a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change\n
-            -a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k timechange\n
-            -a always,exit -F arch=b64 -S clock_settime -k time-change\n
-            -a always,exit -F arch=b32 -S clock_settime -k time-change\n
-            -w /etc/localtime -p wa -k time-change"
+  with_items:
+    - "-a always,exit -F arch=b64 -S adjtimex -S settimeofday -k time-change"
+    - "-a always,exit -F arch=b32 -S adjtimex -S settimeofday -S stime -k time-change"
+    - "-a always,exit -F arch=b64 -S clock_settime -k time-change"
+    - "-a always,exit -F arch=b32 -S clock_settime -k time-change"
+    - "-w /etc/localtime -p wa -k time-change"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -132,18 +144,20 @@
     - low
 
 - name: "SCORED | 4.1.5 | PATCH | Ensure events that modify user/group information are collected"
-  blockinfile:
-    path: /etc/audit/rules.d/audit.rules
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "{{ item }}"
     state: present
     create: yes
-    block: " -w /etc/group -p wa -k identity\n
-            -w /etc/passwd -p wa -k identity\n
-            -w /etc/gshadow -p wa -k identity\n
-            -w /etc/shadow -p wa -k identity\n
-            -w /etc/security/opasswd -p wa -k identity"
+  with_items:
+    - "-w /etc/group -p wa -k identity"
+    - "-w /etc/passwd -p wa -k identity"
+    - "-w /etc/gshadow -p wa -k identity"
+    - "-w /etc/shadow -p wa -k identity"
+    - "-w /etc/security/opasswd -p wa -k identity"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -152,20 +166,22 @@
     - low
 
 - name: "SCORED | 4.1.6 | PATCH | Ensure events that modify the system's network environment are collected"
-  blockinfile:
-    path: /etc/audit/rules.d/audit.rules
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "{{ item }}"
     state: present
     create: yes
-    block: " -a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale\n
-            -a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale\n
-            -w /etc/issue -p wa -k system-locale\n
-            -w /etc/issue.net -p wa -k system-locale\n
-            -w /etc/hosts -p wa -k system-locale\n
-            -w /etc/sysconfig/network -p wa -k system-locale\n
-            -w /etc/sysconfig/network-scripts/ -p wa -k system-locale"
+  with_items:
+    - "-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale"
+    - "-a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale"
+    - "-w /etc/issue -p wa -k system-locale"
+    - "-w /etc/issue.net -p wa -k system-locale"
+    - "-w /etc/hosts -p wa -k system-locale"
+    - "-w /etc/sysconfig/network -p wa -k system-locale"
+    - "-w /etc/sysconfig/network-scripts/ -p wa -k system-locale"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -174,32 +190,45 @@
     - low
 
 - name: "SCORED | 4.1.7 | PATCH | Ensure events that modify the system's Mandatory Access Controls are collected"
-  blockinfile:
-    path: /etc/audit/rules.d/audit.rules
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "-w /etc/selinux/ -p wa -k MAC-policy"
     state: present
-    create: yes
-    block: " -w /etc/selinux/ -p wa -k MAC-policy\n
-            -w /usr/share/selinux/ -p wa -k MAC-policy"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
     - patch
     - rule_4.1.7
     - low
-
+- name: "SCORED | 4.1.7 | PATCH | Ensure events that modify the system's Mandatory Access Controls are collected"
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "-w /usr/share/selinux/ -p wa -k MAC-policy"
+    state: present
+  ignore_errors: yes
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+  tags:
+    - level2
+    - auditd
+    - patch
+    - rule_4.1.7
+    - low
 - name: "SCORED | 4.1.8 | PATCH | Ensure login and logout events are collected"
-  blockinfile:
-    path: /etc/audit/audit.d/audit.rules
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "{{ item }}"
     state: present
     create: yes
-    block: " -w /var/log/lastlog -p wa -k logins\n
-            -w /var/run/faillock/ -p wa -k logins"
+  with_items:
+    - "-w /var/log/lastlog -p wa -k logins"
+    - "-w /var/run/faillock/ -p wa -k logins"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -208,16 +237,18 @@
     - low
 
 - name: "SCORED | 4.1.9 | PATCH | Ensure session initiation information is collected"
-  blockinfile:
-    path: /etc/audit/rules.d/audit.rules
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "{{ item }}"
     state: present
     create: yes
-    block: " -w /var/run/utmp -p wa -k session\n
-            -w /var/log/wtmp -p wa -k logins\n
-            -w /var/log/btmp -p wa -k logins"
+  with_items:
+    - "-w /var/run/utmp -p wa -k session"
+    - "-w /var/log/wtmp -p wa -k logins"
+    - "-w /var/log/btmp -p wa -k logins"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -226,19 +257,21 @@
     - low
 
 - name: "SCORED | 4.1.10 | PATCH | Ensure discretionary access control permission modification events are collected"
-  blockinfile:
-    path: /etc/audit/rules.d/audit.rules
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "{{ item }}"
     state: present
     create: yes
-    block: " -a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod\n
-            -a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod\n
-            -a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod\n
-            -a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod\n
-            -a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod\n
-            -a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+  with_items:
+    - "-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+    - "-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -247,17 +280,19 @@
     - low
 
 - name: "SCORED | 4.1.11 | PATCH | Ensure unsuccessful unauthorized file access attempts are collected"
-  blockinfile:
-    path: /etc/audit/rules.d/audit.rules
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "{{ item }}"
     state: present
     create: yes
-    block: " -a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access\n
-            -a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access\n
-            -a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access\n
-            -a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access"
+  with_items:
+    - "-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access"
+    - "-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access"
+    - "-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access"
+    - "-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -282,8 +317,8 @@
     dest: /etc/audit/rules.d/audit.rules
     line: "-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts"
     state: present
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -296,8 +331,8 @@
     dest: /etc/audit/rules.d/audit.rules
     line: "-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k mounts"
     state: present
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -306,15 +341,17 @@
     - low
 
 - name: "SCORED | 4.1.14 | PATCH | Ensure file deletion events by users are collected"
-  blockinfile:
-    path: /etc/audit/rules.d/audit.rules
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "{{ item }}"
     state: present
     create: yes
-    block: " -a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete\n
-            -a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete"
+  with_items:
+    - "-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete"
+    - "-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -327,8 +364,8 @@
     dest: /etc/audit/rules.d/audit.rules
     line: "-w /etc/sudoers -p wa -k scope"
     state: present
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -341,8 +378,8 @@
     dest: /etc/audit/audit.rules
     line: "-w /etc/sudoers -p wa -k scope"
     state: present
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -353,10 +390,10 @@
 - name: "SCORED | 4.1.15 | PATCH | Ensure changes to system administration scope (sudoers) is collected"
   lineinfile:
     dest: /etc/audit/rules.d/audit.rules
-    line: "-w /etc/sudoers.d -p wa -k scope"
+    line: "-w /etc/sudoers.d/ -p wa -k scope"
     state: present
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -369,8 +406,8 @@
     dest: /etc/audit/rules.d/audit.rules
     line: "-w /var/log/sudo.log -p wa -k actions"
     state: present
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -379,17 +416,19 @@
     - low
 
 - name: "SCORED | 4.1.17 | PATCH | Ensure kernel module loading and unloading is collected"
-  blockinfile:
-    path: /etc/audit/rules.d/audit.rules
+  lineinfile:
+    dest: /etc/audit/rules.d/audit.rules
+    line: "{{ item }}"
     state: present
     create: yes
-    block: " -w /sbin/insmod -p x -k modules\n
-            -w /sbin/rmmod -p x -k modules\n
-            -w /sbin/modprobe -p x -k modules\n
-            -a always,exit -F arch=b64 -S init_module -S delete_module -k modules"
+  with_items:
+    - "-w /sbin/insmod -p x -k modules"
+    - "-w /sbin/rmmod -p x -k modules"
+    - "-w /sbin/modprobe -p x -k modules"
+    - "-a always,exit -F arch=b64 -S init_module -S delete_module -k modules"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -405,8 +444,8 @@
     insertafter: EOF
     line: "-e 2"
   ignore_errors: yes
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - auditd
@@ -458,9 +497,9 @@
     regexp: '^\$FileCreateMode'
     line: '$FileCreateMode 0640'
     create: yes
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_rsyslog is defined and amazonlinux2cis_rsyslog
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_rsyslog is defined and amazonlinux2cis_rsyslog
   tags:
     - level1
     - patch
@@ -473,9 +512,9 @@
     recurse: yes
     patterns: "*.conf"
   register: rsyslogd_conf_files
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_rsyslog is defined and amazonlinux2cis_rsyslog
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_rsyslog is defined and amazonlinux2cis_rsyslog
   tags:
     - level1
     - patch
@@ -492,8 +531,8 @@
   with_items: rsyslogd_conf_files.path
   ignore_errors: yes
   when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_rsyslog is defined and amazonlinux2cis_rsyslog
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_rsyslog is defined and amazonlinux2cis_rsyslog
     - rsyslogd_conf_files is defined and rsyslogd_conf_files.matches >= 1
   tags:
     - level1
@@ -506,9 +545,9 @@
     dest: /etc/rsyslog.conf
     regexp: "^\\*\\.\\*"
     line: "*.* @@{{ amazonlinux2cis_rsyslog_loghost_address }}"
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_rsyslog is defined and amazonlinux2cis_rsyslog
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_rsyslog is defined and amazonlinux2cis_rsyslog
   tags:
     - level1
     - patch
@@ -670,9 +709,10 @@
     - low
 
 - name: "SCORED | 4.2.4 | PATCH | Ensure permissions on all logfiles are configured"
-  command: find /var/log -type f -exec chmod g-wx,o-rwx {} +
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  command: find /var/log -type f -exec chmod g-wx,o-rwx {} +
+  shell: "find /var/log -type f -exec chmod g-wx,o-rwx {} +"
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - level1
     - patch
@@ -689,3 +729,49 @@
     - patch
     - rule_4.3
     - low
+#- name: "SCORED | 4.1.all | PATCH | Ensure events that modify user/group information are collected"
+#  lineinfile:
+#    dest: /etc/audit/rules.d/audit.rules
+#    line: "{{ item }}"
+#    state: present
+#    create: yes
+#  with_items:
+#    - "-w /etc/group -p wa -k identity"
+#    - "-w /etc/passwd -p wa -k identity"
+#    - "-w /etc/gshadow -p wa -k identity"
+#    - "-w /etc/shadow -p wa -k identity"
+#    - "-w /etc/security/opasswd -p wa -k identity"
+#    - "-a always,exit -F arch=b64 -S sethostname -S setdomainname -k system-locale"
+#    - "-a always,exit -F arch=b32 -S sethostname -S setdomainname -k system-locale"
+#    - "-w /etc/issue -p wa -k system-locale"
+#    - "-w /etc/issue.net -p wa -k system-locale"
+#    - "-w /etc/hosts -p wa -k system-locale"
+#    - "-w /etc/sysconfig/network -p wa -k system-locale"
+#    - "-w /etc/sysconfig/network-scripts/ -p wa -k system-locale"
+#    - "-w /var/run/utmp -p wa -k session"
+#    - "-w /var/log/wtmp -p wa -k logins"
+#    - "-w /var/log/btmp -p wa -k logins"
+#    - "-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+#    - "-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+#    - "-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+#    - "-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+#    - "-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+#    - "-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k perm_mod"
+#    - "-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access"
+#    - "-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access"
+#    - "-a always,exit -F arch=b64 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access"
+#    - "-a always,exit -F arch=b32 -S creat -S open -S openat -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access"
+#    - "-a always,exit -F arch=b64 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete"
+#    - "-a always,exit -F arch=b32 -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete"
+#    - "-w /sbin/insmod -p x -k modules"
+#    - "-w /sbin/rmmod -p x -k modules"
+#    - "-w /sbin/modprobe -p x -k modules"
+#    - "-a always,exit -F arch=b64 -S init_module -S delete_module -k modules"
+#  ignore_errors: yes
+#  tags:
+#    - level2
+#    - level1
+#    - auditd
+#    - patch
+#    - rule_4.1.all
+#    - low

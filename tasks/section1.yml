@@ -162,8 +162,8 @@
   changed_when: false
   ignore_errors: true
   check_mode: no
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - level1
     - rule_1
@@ -176,7 +176,7 @@
     name: python-pip
     state: present
   when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1 
+    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
     - tmp_partition.rc == 0
   tags:
     - level1
@@ -388,8 +388,8 @@
   changed_when: false
   ignore_errors: true
   check_mode: no
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - rule_1
@@ -402,7 +402,7 @@
     state: present
   check_mode: no
   when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
     - var_partition.rc == 0
   tags:
     - level2
@@ -415,7 +415,7 @@
   pip:
     name: fstab
   when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
     - var_partition.rc == 0
   tags:
     - level2
@@ -429,7 +429,7 @@
     option: nosuid
     state: present
   when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
     - var_partition.rc == 0
   tags:
     - level2
@@ -443,7 +443,7 @@
     option: noexec
     state: present
   when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
     - var_partition.rc == 0
   tags:
     - level2
@@ -457,7 +457,7 @@
     option: nodev
     state: present
   when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
     - var_partition.rc == 0
   tags:
     - level2
@@ -471,8 +471,8 @@
   register: var_mounted
   changed_when: no
   failed_when: no
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - level2
     - rule_1
@@ -485,8 +485,8 @@
   register: var_tmp_mounted
   changed_when: no
   failed_when: no
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1 or amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1 or amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
       - level2
       - scored
@@ -553,8 +553,8 @@
   register: var_log_mounted
   changed_when: no
   failed_when: no
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
       - level2
       - scored
@@ -567,8 +567,8 @@
   register: var_log_audit_mounted
   changed_when: no
   failed_when: no
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
       - level2
       - scored
@@ -581,8 +581,8 @@
   register: home_mounted
   changed_when: no
   failed_when: no
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2 or amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2 or amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
       - level2
       - scored
@@ -642,7 +642,7 @@
   systemd:
     name: autofs
     enabled: no
-  ignore_errors: true 
+  ignore_errors: true
   when:
     - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
     - amazonlinux2cis_allow_autofs == false
@@ -764,19 +764,56 @@
     - medium
 
 
+#- name: "SCORED | 1.3.2 | PATCH | Ensure filesystem integrity is regularly checked"
+#  cron:
+#    name: Run AIDE integrity check weekly
+#    cron_file: "{{ amazonlinux2cis_aide_cron['cron_file'] }}"
+#    user: "{{ amazonlinux2cis_aide_cron['cron_user'] }}"
+#    minute: "{{ amazonlinux2cis_aide_cron['aide_minute'] | default('0') }}"
+#    hour: "{{ amazonlinux2cis_aide_cron['aide_hour'] | default('5') }}"
+#    day: "{{ amazonlinux2cis_aide_cron['aide_day'] | default('*') }}"
+#    month: "{{ amazonlinux2cis_aide_cron['aide_month'] | default('*') }}"
+#    weekday: "{{ amazonlinux2cis_aide_cron['aide_weekday'] | default('*') }}"
+#    job: "{{ amazonlinux2cis_aide_cron['aide_job'] }}"
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  tags:
+#    - level1
+#    - scored
+#    - aide
+#    - file_integrity
+#    - patch
+#    - rule_1.3.2
+#    - low
+
+#- name: "SCORED | 1.3.2 | PATCH | Ensure filesystem integrity is regularly checked"
+#  cron:
+#    name: Run AIDE integrity check weekly
+#    cron_file: "/var/spool/cron/root"
+#    user: "{{ amazonlinux2cis_aide_cron['cron_user'] }}"
+#    minute: "{{ amazonlinux2cis_aide_cron['aide_minute'] | default('0') }}"
+#    hour: "{{ amazonlinux2cis_aide_cron['aide_hour'] | default('5') }}"
+#    day: "{{ amazonlinux2cis_aide_cron['aide_day'] | default('*') }}"
+#    month: "{{ amazonlinux2cis_aide_cron['aide_month'] | default('*') }}"
+#    weekday: "{{ amazonlinux2cis_aide_cron['aide_weekday'] | default('*') }}"
+#    job: "{{ amazonlinux2cis_aide_cron['aide_job'] }}"
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  tags:
+#    - level1
+#    - scored
+#    - aide
+#    - file_integrity
+#    - patch
+#    - rule_1.3.2
+#    - low
+
 - name: "SCORED | 1.3.2 | PATCH | Ensure filesystem integrity is regularly checked"
   cron:
     name: Run AIDE integrity check weekly
-    cron_file: "{{ amazonlinux2cis_aide_cron['cron_file'] }}"
-    user: "{{ amazonlinux2cis_aide_cron['cron_user'] }}"
-    minute: "{{ amazonlinux2cis_aide_cron['aide_minute'] | default('0') }}"
-    hour: "{{ amazonlinux2cis_aide_cron['aide_hour'] | default('5') }}"
-    day: "{{ amazonlinux2cis_aide_cron['aide_day'] | default('*') }}"
-    month: "{{ amazonlinux2cis_aide_cron['aide_month'] | default('*') }}"
-    weekday: "{{ amazonlinux2cis_aide_cron['aide_weekday'] | default('*') }}"
-    job: "{{ amazonlinux2cis_aide_cron['aide_job'] }}"
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+    minute: "0"
+    hour: "5"
+    job: /usr/sbin/aide --check
   tags:
     - level1
     - scored
@@ -786,51 +823,29 @@
     - rule_1.3.2
     - low
 
-- name: "SCORED | 1.3.2 | PATCH | Ensure filesystem integrity is regularly checked"
-  cron:
-    name: Run AIDE integrity check weekly
-    cron_file: "/var/spool/cron/root"
-    user: "{{ amazonlinux2cis_aide_cron['cron_user'] }}"
-    minute: "{{ amazonlinux2cis_aide_cron['aide_minute'] | default('0') }}"
-    hour: "{{ amazonlinux2cis_aide_cron['aide_hour'] | default('5') }}"
-    day: "{{ amazonlinux2cis_aide_cron['aide_day'] | default('*') }}"
-    month: "{{ amazonlinux2cis_aide_cron['aide_month'] | default('*') }}"
-    weekday: "{{ amazonlinux2cis_aide_cron['aide_weekday'] | default('*') }}"
-    job: "{{ amazonlinux2cis_aide_cron['aide_job'] }}"
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-  tags:
-    - level1
-    - scored
-    - aide
-    - file_integrity
-    - patch
-    - rule_1.3.2
-    - low
-
-- name: "SCORED | 1.4.1 | PATCH | Ensure permissions on bootloader config are configured"
-  stat:
-    path: /boot/grub2/grub.cfg
+#- name: "SCORED | 1.4.1 | PATCH | Ensure permissions on bootloader config are configured"
+#  stat:
+#    path: /boot/grub2/grub.cfg
 #   path: /boot/grub/menu.lst
-  register: grub_cfg
-  tags:
-    - level1
-    - scored
-    - grub
-    - patch
-    - rule_1.4.1
-    - low
+#  register: grub_cfg
+#  tags:
+#    - level1
+#    - scored
+#    - grub
+#    - patch
+#    - rule_1.4.1
+#    - low
 
 - name: "SCORED | 1.4.1 | PATCH | Ensure permissions on bootloader config are configured"
   file:
-    path: "{{ grub_cfg.stat.lnk_source }}"
+    path: /boot/grub2/grub.cfg
     owner: root
     group: root
     mode: 0600
   when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - grub_cfg is defined
-    - grub_cfg.stat.exists and grub_cfg.stat.islnk
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - grub_cfg is defined
+#    - grub_cfg.stat.exists and grub_cfg.stat.islnk
   tags:
     - level1
     - scored
@@ -971,9 +986,9 @@
     conf: /etc/selinux/config
     policy: "{{ amazonlinux2cis_selinux_pol }}"
     state: enforcing
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
-    - amazonlinux2cis_selinux_disable is defined and not amazonlinux2cis_selinux_disable
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#    - amazonlinux2cis_selinux_disable is defined and not amazonlinux2cis_selinux_disable
   tags:
     - level2
     - scored
@@ -1012,8 +1027,8 @@
 - name: "SCORED | 1.6.1.6 | PATCH | Ensure no unconfined daemons exist"
   command: /bin/true
   changed_when: no
-  when:
-    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
+#  when:
+#    - amazonlinux2cis_level2 is defined and amazonlinux2cis_level2
   tags:
     - level2
     - patch
@@ -1068,19 +1083,19 @@
     - rule_1.7.1.1
     - low
 
-- name: "SCORED | 1.7.1.1 | PATCH | Ensure message of the day is configured properly"
-  template:
-    src: etc/motd.j2
-    dest: /etc/motd
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_set_motd is defined and amazonlinux2cis_set_motd
-  tags:
-    - level1
-    - banner
-    - patch
-    - rule_1.7.1.1
-    - low
+#- name: "SCORED | 1.7.1.1 | PATCH | Ensure message of the day is configured properly"
+#  template:
+#    src: etc/motd.j2
+#    dest: /etc/motd
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_set_motd is defined and amazonlinux2cis_set_motd
+#  tags:
+#    - level1
+#    - banner
+#    - patch
+#    - rule_1.7.1.1
+#    - low
 
 - name: "SCORED | 1.7.1.1 | PATCH | Ensure message of the day is configured properly"
   template:
@@ -1108,12 +1123,38 @@
     - rule_1.7.1.2
     - low
 
+#- name: "NOTSCORED | 1.7.1.3 | PATCH | Ensure remote login warning banner is configured properly"
+#  template:
+#    src: etc/issue.net.j2
+#    dest: /etc/issue.net
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#  tags:
+#    - level1
+#    - banner
+#    - patch
+#    - rule_1.7.1.3
+#    - low
+
 - name: "NOTSCORED | 1.7.1.3 | PATCH | Ensure remote login warning banner is configured properly"
-  template:
-    src: etc/issue.net.j2
-    dest: /etc/issue.net
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+  blockinfile:
+    path: "{{ item.msg_path }}"
+    state: present
+    content: |
+      {{ item.block }}
+  with_items:
+    - "{{ block_msg }}"
+  tags:
+    - level1
+    - banner
+    - patch
+    - rule_1.7.1.3
+    - low
+
+- name: "NOTSCORED | 1.7.1.3 | PATCH | Ensure remote login warning banner is configured properly"
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: 'Banner /etc/issue.net'
   tags:
     - level1
     - banner

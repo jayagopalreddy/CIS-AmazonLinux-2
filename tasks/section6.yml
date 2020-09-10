@@ -116,9 +116,9 @@
     dest: /etc/gshadow-
     owner: root
     group: root
-    mode: 0600
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+    mode: 0000
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:
     - rule_6.1.9
     - patch
@@ -744,7 +744,7 @@
 - name: "SCORED | 6.2.15 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
   debug:
     msg: "PASS | 6.2.15 | All groups exist in /etc/group."
-  when: 
+  when:
     - check_groups_in_passwd is defined and check_groups_in_passwd.stdout == ""
     - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
   tags:

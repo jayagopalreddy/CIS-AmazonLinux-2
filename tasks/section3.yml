@@ -480,10 +480,10 @@
     jump: ACCEPT
     action: append
     state: present
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
-    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
+#    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
   tags:
     - level1
     - patch
@@ -498,10 +498,10 @@
     jump: ACCEPT
     action: append
     state: present
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
-    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
+#    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
   tags:
     - level1
     - patch
@@ -516,10 +516,35 @@
     jump: DROP
     action: append
     state: present
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
-    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
+#    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
+  tags:
+    - level1
+    - patch
+    - rule_3.5.1.2
+    - low
+
+- name: "SCORED | 3.5.1.2 | PATCH | Ensure loopback traffic is configured | 127.0.0.0/8 rule"
+  command: sudo chmod +x /etc/rc.d/rc.local
+  tags:
+    - level1
+    - patch
+    - rule_3.5.1.2
+    - low
+
+- name: "SCORED | 3.5.1.2 | PATCH | Ensure loopback traffic is configured | 127.0.0.0/8 rule"
+  lineinfile:
+    dest: /etc/rc.d/rc.local
+    line: "{{ item }}"
+    state: present
+    create: yes
+  with_items:
+    - "sudo iptables -A INPUT -i lo -j ACCEPT"
+    - "sudo iptables -A OUTPUT -o lo -j ACCEPT"
+    - "sudo iptables -A INPUT -s 127.0.0.0/8 -j DROP"
+  ignore_errors: yes
   tags:
     - level1
     - patch
@@ -637,9 +662,9 @@
 - name: "SCORED | 3.5.1.4 | PATCH | Ensure firewall rules exist for all open ports"
   debug:
     msg: "Ensure firewall rules exist for all open ports"
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
   tags:
     - level1
     - patch
@@ -653,10 +678,10 @@
     policy: DROP
     action: append
     state: present
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
-    - amazonlinux2cis_firewall_default_deny_rule is defined and amazonlinux2cis_firewall_default_deny_rule
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
+#    - amazonlinux2cis_firewall_default_deny_rule is defined and amazonlinux2cis_firewall_default_deny_rule
   tags:
     - level1
     - patch
@@ -670,10 +695,10 @@
     policy: DROP
     action: append
     state: present
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
-    - amazonlinux2cis_firewall_default_deny_rule is defined and amazonlinux2cis_firewall_default_deny_rule
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
+#    - amazonlinux2cis_firewall_default_deny_rule is defined and amazonlinux2cis_firewall_default_deny_rule
   tags:
     - level1
     - patch
@@ -687,10 +712,10 @@
     policy: DROP
     action: append
     state: present
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
-    - amazonlinux2cis_firewall_default_deny_rule is defined and amazonlinux2cis_firewall_default_deny_rule
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
+#    - amazonlinux2cis_firewall_default_deny_rule is defined and amazonlinux2cis_firewall_default_deny_rule
   tags:
     - level1
     - patch
@@ -705,10 +730,10 @@
     jump: ACCEPT
     action: append
     state: present
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
-    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
+#    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
   tags:
     - level1
     - patch
@@ -723,10 +748,10 @@
     jump: ACCEPT
     action: append
     state: present
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
-    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
+#    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
   tags:
     - level1
     - patch
@@ -741,10 +766,35 @@
     jump: DROP
     action: append
     state: present
-  when:
-    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
-    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
-    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
+#  when:
+#    - amazonlinux2cis_level1 is defined and amazonlinux2cis_level1
+#    - amazonlinux2cis_firewall is defined and amazonlinux2cis_firewall == "iptables"
+#    - amazonlinux2cis_firewall_loopback_rule is defined and amazonlinux2cis_firewall_loopback_rule
+  tags:
+    - level1
+    - patch
+    - rule_3.5.2.2
+    - low
+
+- name: "SCORED | 3.5.2.2 | PATCH | Ensure IPv6 loopback traffic is configured | 127.0.0.0/8 rule"
+  command: sudo chmod +x /etc/rc.d/rc.local
+  tags:
+    - level1
+    - patch
+    - rule_3.5.2.2
+    - low
+
+- name: "SCORED | 3.5.2.2 | PATCH | Ensure IPv6 loopback traffic is configured | 127.0.0.0/8 rule"
+  lineinfile:
+    dest: /etc/rc.d/rc.local
+    line: "{{ item }}"
+    state: present
+    create: yes
+  with_items:
+    - "sudo ip6tables -A INPUT -i lo -j ACCEPT"
+    - "sudo ip6tables -A OUTPUT -o lo -j ACCEPT"
+    - "sudo ip6tables -A INPUT -s ::1 -j DROP"
+  ignore_errors: yes
   tags:
     - level1
     - patch
