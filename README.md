@@ -1,5 +1,5 @@
 <<<<<<< HEAD
-# AmazonLinux-2-CIS - v1.0.0 - Latest
+# CIS-AmazonLinux-2 - v1.0.0 - Latest
 
 ## Amazon Linux 2 - CIS Benchmark Hardening Script
 
@@ -16,7 +16,7 @@ Amazon Linux 2
 ```
 ## Role
 ```
-role: AmazonLinux-2-CIS
+role: CIS-AmazonLinux-2
 ```
 ## Role/Playbook Tags
 ```
@@ -44,10 +44,3 @@ Refer to defaults/main.yml for other vars
 ```
 Refer to AmazonLinux-2-CIS_Benchmark_(level1, level1_and_level2, or level2).ymls for sample playbook.ymls. Change the role to match role folder name.
 ```
-## License
-This Source Code Form is subject to the terms of the Mozilla Public
-License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at https://mozilla.org/MPL/2.0/.
-=======
-# CIS-AmazonLinux-2
->>>>>>> 863195d2f3bb65724149a1e38aa7baa1a0fee4fc
